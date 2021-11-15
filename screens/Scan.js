@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-
-export default function App() {
+import cheerio from 'cheerio'
+export default function Scan({ navigation, route }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [forward, setForward] = useState(true)
@@ -14,9 +14,31 @@ export default function App() {
     })();
   }, []);
 
+  async function loadProductData(bcode) {
+    const searchUrl = "https://barcodelookup.com/" + bcode
+    try {
+      const response = await fetch(searchUrl)
+      const text = await response.text();
+      const $ = cheerio.load(text)
+      console.log("worked!")
+      var data = []
+      var imgLink = ""
+      $("div.product-text-label").each((i, c) => {
+        console.log($(c).text())
+        data.push($(c).text())
+      })
+      $("img#img_preview").each((i, c) => {
+        imgLink = $(c).attr("src")
+      })
+      navigation.navigate("Results", { data: { data }, imgLink: { imgLink } })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    loadProductData(data)
   };
 
   if (hasPermission === null) {

@@ -1,11 +1,11 @@
 import React from "react";
-import { View } from "react-native";
+import { View, ScrollView, Button } from "react-native";
 import { Title } from "react-native-paper";
+export default function Settings() {
 
-export default function Home() {
   return (
-    <View>
+    <ScrollView>
       <Title>Settings</Title>
-    </View>
+    </ScrollView>
   );
 }

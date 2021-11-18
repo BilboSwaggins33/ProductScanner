@@ -28,7 +28,7 @@ export default function Scan({ navigation, route }) {
       var imgLink = ""
       $("div.product-text-label").each((i, c) => {
         //console.log($(c).clone().children().remove().end().text().replace(/\n/g, ''))
-        var category = $(c).clone().children().remove().end().text().replace(/\n/g, '')
+        var category = $(c).clone().children().remove().end().text().replace(/\n/g, '').replace(/\s/g, '')
         var desc = $(c).find('span.product-text').text().replace(/\n/g, '')
         //console.log($(c).find('span.product-text').text())
         data[category] = desc
@@ -36,7 +36,11 @@ export default function Scan({ navigation, route }) {
       $("img#img_preview").each((i, c) => {
         imgLink = $(c).attr("src")
       })
-      navigation.navigate("Results", { data: { data }, imgLink: { imgLink }, amazonURL: { amazonURL } })
+      const wikiresp = await fetch("https://en.wikipedia.org/w/index.php?search=~" + data["Manufacturer:"].replace('/\s/g', '_') + "&title=Special:Search&profile=advanced&fulltext=1&ns0=1")
+      const wikitext = await wikiresp.text()
+      const $$ = cheerio.load(wikitext)
+      var wikiURL = "https://en.wikipedia.org" + $$("div.mw-search-result-heading").first().find("a").attr("href")
+      navigation.navigate("Results", { data: { data }, imgLink: { imgLink }, amazonURL: { amazonURL }, wikiURL: { wikiURL } })
     } catch (e) {
       console.log(e)
     }

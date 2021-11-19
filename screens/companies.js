@@ -1,4 +1,4 @@
-{
+export default {
     "2Chillies Swimwear": "4963",
     "2K": "5455",
     "2XU": "2289",
@@ -2489,4 +2489,4 @@
     "Zwanenberg": "2225",
     "Zwanenberg Australia": "2226",
     "Zynga": "5520"
-}
+  }

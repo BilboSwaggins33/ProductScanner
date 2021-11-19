@@ -1,14 +1,15 @@
+
+
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import cheerio from 'cheerio'
-import * as companies from './companies.json'
+import companies from './companies'
 export default function Scan({ navigation, route }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
   useEffect(() => {
-    console.log(companies)
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       console.log(status)
@@ -68,6 +69,7 @@ export default function Scan({ navigation, route }) {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
+  console.log(companies)
   return (
     <View style={styles.container}>
       <BarCodeScanner

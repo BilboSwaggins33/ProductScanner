@@ -5,6 +5,7 @@ export default function Results({ navigation, route }) {
     const imgLink = route.params.imgLink.imgLink
     const amazonURL = route.params.amazonURL.amazonURL
     const wikiURL = route.params.wikiURL.wikiURL
+    const companyURL = route.params.companyURL.companyURL
     //console.log(data)
     return (
         <ScrollView style={styles.container}>
@@ -12,8 +13,9 @@ export default function Results({ navigation, route }) {
             <View>
                 <Text>{JSON.stringify(data)}</Text>
             </View>
-            <Button title="Link Amazon" onPress={() => Linking.openURL(amazonURL)}>Amazon Link: {amazonURL}</Button>
-            <Button title="Link Wikipedia" onPress={() => Linking.openURL(wikiURL)}>Wikipedia Link: {wikiURL}</Button>
+            <Button title="Link Amazon" onPress={() => Linking.openURL(amazonURL)} />
+            <Button title="Link Wikipedia" onPress={() => Linking.openURL(wikiURL)} />
+            <Button title="Link Company Page" onPress={() => Linking.openURL(companyURL)} />
         </ScrollView>
     );
 }

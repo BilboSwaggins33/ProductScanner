@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import cheerio from 'cheerio'
-import { children } from 'cheerio/lib/api/traversing';
 
 export default function Scan({ navigation, route }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -26,6 +25,7 @@ export default function Scan({ navigation, route }) {
       console.log("worked!")
       var data = {}
       var imgLink = ""
+      var companyURL = "https://google.com"
       $("div.product-text-label").each((i, c) => {
         //console.log($(c).clone().children().remove().end().text().replace(/\n/g, ''))
         var category = $(c).clone().children().remove().end().text().replace(/\n/g, '').replace(/\s/g, '')
@@ -40,7 +40,16 @@ export default function Scan({ navigation, route }) {
       const wikitext = await wikiresp.text()
       const $$ = cheerio.load(wikitext)
       var wikiURL = "https://en.wikipedia.org" + $$("div.mw-search-result-heading").first().find("a").attr("href")
-      navigation.navigate("Results", { data: { data }, imgLink: { imgLink }, amazonURL: { amazonURL }, wikiURL: { wikiURL } })
+      //this company url finder works, but only limited amount of requests, so keep it commented for now
+      //fetch("https://companyurlfinder.com/cuf?companyName=" + data["Manufacturer:"] + "&api_key=3o5OfQAsF0Y7PgGN4cAD61nsrN8yaUmnirlvQs4P", { method: "GET" }).then(response => response.json())
+      //.then(d => {
+      //  companyURL = d.result.url
+      // });
+      const $$$ = cheerio.load(await (await fetch("https://guide.ethical.org.au/company/?company=" + companyIndex)).text())
+      $$$("td.companyPraise > div > table > tbody > tr > td > a").each((i, c) => {
+        console.log($(c).text())
+      })
+      navigation.navigate("Results", { data: { data }, imgLink: { imgLink }, amazonURL: { amazonURL }, wikiURL: { wikiURL }, companyURL: { companyURL } })
     } catch (e) {
       console.log(e)
     }

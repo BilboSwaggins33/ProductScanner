@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
@@ -8,7 +6,6 @@ import companies from './companies'
 export default function Scan({ navigation, route }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-
 
   function levenshteinDistance(str1, str2) {
     const track = Array(str2.length + 1).fill(null).map(() =>
@@ -93,7 +90,7 @@ export default function Scan({ navigation, route }) {
       $$$("td.companyCriticism > div > table > tbody > tr > td > a").each((i, c) => {
         criticism.push($(c).text())
       })
-
+      console.log(criticism)
       wikiresp = await fetch(wikiURL)
       wikitext = await wikiresp.text()
       $$ = cheerio.load(wikitext)
@@ -104,6 +101,7 @@ export default function Scan({ navigation, route }) {
         founders.push($$(this).text())
       })
       }) */
+      exampleImplementation()
       navigation.navigate("Results", { data, imgLink, amazonURL, companyURL, wikiURL, founders, praise, criticism })
     } catch (e) {
       console.log(e)

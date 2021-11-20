@@ -1,10 +1,10 @@
-import "axios"
+import axios from "axios"
 
-async function getAPINews(topic){
-  const promise = new Promise((resolve, reject)=>{
+async function getAPINews(topic) {
+  const promise = new Promise((resolve, reject) => {
     axios({
-      method:"get",
-      url:"https://newsapi.org/v2/everything?qInTitle="+topic+"&sortBy=popularity&apiKey=19c73dfd439e44bda32df963064b8872"
+      method: "get",
+      url: "https://newsapi.org/v2/everything?qInTitle=" + topic + "&sortBy=popularity&apiKey=19c73dfd439e44bda32df963064b8872"
     }).then((response) => {
       resolve(response.data.articles);
     }, (error) => {
@@ -14,21 +14,21 @@ async function getAPINews(topic){
   return promise;
 }
 
-async function getSentiment(line){
-  const promise = new Promise((resolve, reject)=>{
+async function getSentiment(line) {
+  const promise = new Promise((resolve, reject) => {
     axios({
       method: "post",
-      url:"https://sentim-api.herokuapp.com/api/v1/",
-      headers:{
+      url: "https://sentim-api.herokuapp.com/api/v1/",
+      headers: {
         "Accept": "application/json",
         "Content-Type": "application/json"
       },
-      data:{
-        "text":line
+      data: {
+        "text": line
       }
-    }).then((response)=>{
+    }).then((response) => {
       resolve(response.data);
-    }, (error)=>{
+    }, (error) => {
       reject(error);
     })
   })
@@ -36,10 +36,10 @@ async function getSentiment(line){
 }
 
 //CHECK THIS IF CONFUSED
-async function exampleImplementation(){
+async function exampleImplementation() {
   let data = await getAPINews("tesla");
   let sentimentArr = [];
-  for(let i = 0; i < data.length; i++){
+  for (let i = 0; i < data.length; i++) {
     sentimentArr.push(await getSentiment(data[i].title));
   }
   console.log(sentimentArr);

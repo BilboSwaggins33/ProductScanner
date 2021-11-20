@@ -7,6 +7,8 @@ export default function Results({ navigation, route }) {
     const wikiURL = route.params.wikiURL
     const companyURL = route.params.companyURL
     const founders = route.params.founders
+    const criticism = route.params.criticism
+    const praise = route.params.praise
 
     //console.log(data)
     return (
@@ -18,12 +20,22 @@ export default function Results({ navigation, route }) {
                 <Text><Text style={{ fontWeight: "bold" }}>Manufacturer:</Text> {data["Manufacturer"]}</Text>
                 <Text><Text style={{ fontWeight: "bold" }}>Founders:</Text> {founders.join(", ")}</Text>
             </View>
-            <View style={{}}>
+            <View>
+                <Text style={{ fontWeight: "bold" }}>:(</Text>
+                {criticism.map((item, key) => (
+                    <Text key={key}>{item}</Text>
+                ))}
+                <Text style={{ fontWeight: "bold" }}>:)</Text>
+                {praise.map((item, key) => (
+                    <Text key={key}>{item}</Text>
+                ))}
+            </View>
+
+            <View>
                 <Button title="Link Amazon" onPress={() => Linking.openURL(amazonURL)} />
                 <Button title="Link Wikipedia" onPress={() => Linking.openURL(wikiURL)} />
                 <Button title="Link Company Page" onPress={() => Linking.openURL(companyURL)} />
             </View>
-
         </ScrollView>
     );
 }

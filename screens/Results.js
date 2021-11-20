@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, ScrollView, StyleSheet, Image, Linking, View } from 'react-native';
-import { Title,Button, Card, Paragraph, Avatar } from 'react-native-paper';
+import { Title,Button, Card, Paragraph, Avatar, List } from 'react-native-paper';
 var conversions = {
     "million":1000000,
     "billion":1000000000,
@@ -16,6 +16,10 @@ export default function Results({ navigation, route }) {
     const size = route.params.size
     const news = route.params.news
     const score = route.params.score
+    const criticism = route.params.criticism
+    const praise = route.params.praise
+    const companyURL = route.params.companyURL    
+
 
     function getSize(){
         if(size.includes("billion")){
@@ -40,7 +44,7 @@ export default function Results({ navigation, route }) {
             <Title style={{marginTop:20}}>Company Related Articles</Title>
             <Text><Text style={{fontWeight:'bold'}}>Positivity Rating:</Text> {score*100}%</Text>
             {news.map((article,index)=>(
-                 <Card key={index} style={{marginVertical:10}}>
+                 <Card key={index} style={{marginVertical:10,borderWidth:3,borderColor:"#eee"}}>
                  <Card.Title title={article.title} subtitle={article.description}/>
                  
                  <Card.Cover source={{ uri: article.urlToImage }} />
@@ -51,10 +55,32 @@ export default function Results({ navigation, route }) {
                  </Card.Actions>
                </Card>
             ))}
+            
+            <View>
+                <Title>Company Actions :(</Title>
+                {criticism.map((item, key) => (
+                     <List.Item
+                     key={key}
+                     description="Negative"
+                     title={item}
+                     left={props => <List.Icon {...props} icon="cancel" />}
+                   />
+                ))}
+                <Text style={{ fontWeight: "bold" }}>:)</Text>
+                {praise.map((item, key) => (
+                    <List.Item
+                    key={key}
+                    description="Positive"
+                    title={item}
+                    left={props => <List.Icon {...props} icon="check" />}
+                  />
+                ))}{/* format ui and expand button*/}
+            </View>
             <Title style={{marginTop:20}}>Links</Title>
-            <View style={{flexDirection:'row'}}>
-            <Button style={{marginRight:10}} color="blue" mode="contained" onPress={() => Linking.openURL(amazonURL)}>Amazon</Button>
+            <View style={{flexDirection:'row',justifyContent:"space-between"}}>
+            <Button color="blue" mode="contained" onPress={() => Linking.openURL(amazonURL)}>Amazon</Button>
             <Button mode="contained" color="blue" onPress={() => Linking.openURL(wikiURL)}>Wikipedia</Button>
+            <Button mode="contained" color="blue"  onPress={() => Linking.openURL(companyURL)}>Company</Button>
             </View>
         </ScrollView>
     );
@@ -62,7 +88,7 @@ export default function Results({ navigation, route }) {
 
 const styles = StyleSheet.create({
     container: {
-        padding:10,
-        backgroundColor:"white"
+        padding: 20,
+        backgroundColor: "white"
     },
 });

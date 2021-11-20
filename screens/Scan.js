@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
@@ -11,6 +9,42 @@ import { ActivityIndicator } from 'react-native-paper';
 export default function Scan({ navigation, route }) {
   const [hasPermission, setHasPermission] = useState(null);
 const [loading,setLoading]=useState(false)
+
+  function levenshteinDistance(str1, str2) {
+    const track = Array(str2.length + 1).fill(null).map(() =>
+      Array(str1.length + 1).fill(null));
+    for (let i = 0; i <= str1.length; i += 1) {
+      track[0][i] = i;
+    }
+    for (let j = 0; j <= str2.length; j += 1) {
+      track[j][0] = j;
+    }
+    for (let j = 1; j <= str2.length; j += 1) {
+      for (let i = 1; i <= str1.length; i += 1) {
+        const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
+        track[j][i] = Math.min(
+          track[j][i - 1] + 1, // deletion
+          track[j - 1][i] + 1, // insertion
+          track[j - 1][i - 1] + indicator, // substitution
+        );
+      }
+    }
+    return track[str2.length][str1.length];
+  }
+
+
+  const searchCompany = (str) => {
+    var smallestValue = Object.keys(companies)[0]
+    var cID = companies[Object.keys(companies)[0]]
+    for (let key in companies) {
+      if (levenshteinDistance(key, str) < levenshteinDistance(smallestValue, str)) {
+        smallestValue = key
+        cID = companies[key]
+      }
+    }
+    return cID
+  }
+
   useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -29,6 +63,7 @@ const [loading,setLoading]=useState(false)
       console.log("worked!")
       var data = {}
       var imgLink = ""
+      var companyURL = "https://google.com"
       $("div.product-text-label").each((i, c) => {
         //console.log($(c).clone().children().remove().end().text().replace(/\n/g, ''))
         var category = $(c).clone().children().remove().end().text().replace(/\n/g, '').replace(/\s/g, '')
@@ -44,6 +79,21 @@ const [loading,setLoading]=useState(false)
       let wikitext = await wikiresp.text()
       let $$ = cheerio.load(wikitext)
       var wikiURL = "https://en.wikipedia.org" + $$("div.mw-search-result-heading").first().find("a").attr("href")
+      //this company url finder works, but only limited amount of requests, so keep it commented for now
+      //fetch("https://companyurlfinder.com/cuf?companyName=" + data["Manufacturer:"] + "&api_key=3o5OfQAsF0Y7PgGN4cAD61nsrN8yaUmnirlvQs4P", { method: "GET" }).then(response => response.json())
+      //.then(d => {
+      //  companyURL = d.result.url
+      // });
+      var praise = []
+      var criticism = []
+      const $$$ = cheerio.load(await (await fetch("https://guide.ethical.org.au/company/?company=" + searchCompany(data["Manufacturer"]))).text())
+      $$$("td.companyPraise > div > table > tbody > tr > td > a").each((i, c) => {
+        praise.push($(c).text())
+      })
+      $$$("td.companyCriticism > div > table > tbody > tr > td > a").each((i, c) => {
+        criticism.push($(c).text())
+      })
+      console.log(criticism)
       wikiresp = await fetch(wikiURL)
       wikitext = await wikiresp.text()
       $$ = cheerio.load(wikitext)
@@ -71,15 +121,11 @@ const [loading,setLoading]=useState(false)
       let news = await getAPINews(data["Manufacturer"]);
       console.log(news)
 
-      var badNews = []
       var total = 0
       var numArticles = 0
       for (let i = 0; i < news.length; i++) {
         let sentiment = (await getSentiment(news[i].title)).result.polarity
         if(sentiment!=0){
-          if(sentiment<0){
-            badNews.push(news[i])
-          }
           total += sentiment
           numArticles+=1
         }
@@ -87,7 +133,7 @@ const [loading,setLoading]=useState(false)
       }
       let score = total/numArticles
       setLoading(false)
-      navigation.navigate("Results", { data, imgLink, amazonURL, wikiURL, leaders, size,score,news:badNews })
+      navigation.navigate("Results", { data, imgLink, amazonURL, wikiURL, leaders, praise,criticism,size,score,news })
     } catch (e) {
       console.log(e)
     }

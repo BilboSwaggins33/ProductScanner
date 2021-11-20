@@ -11,13 +11,8 @@ const Tab = createMaterialBottomTabNavigator();
 
 function Dashboard() {
   return (
-    <Stack.Navigator initialRouteName="Home" screenOptions={{
-      headerStyle: {
-        height: 60,
-        backgroundColor: "#000"
-      }
-    }}>
-      <Stack.Screen name="Home" component={Scan} options={{ title: ' ' }} />
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen name="Home" component={Scan} options={{ title: 'Scan' }} />
       <Stack.Screen name="Results" component={Results} />
     </Stack.Navigator >
   )

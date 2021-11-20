@@ -1,6 +1,6 @@
-import "axios"
+import axios from "axios"
 
-async function getAPINews(topic){
+export async function getAPINews(topic){
   const promise = new Promise((resolve, reject)=>{
     axios({
       method:"get",
@@ -14,7 +14,7 @@ async function getAPINews(topic){
   return promise;
 }
 
-async function getSentiment(line){
+export async function getSentiment(line){
   const promise = new Promise((resolve, reject)=>{
     axios({
       method: "post",
@@ -36,14 +36,6 @@ async function getSentiment(line){
 }
 
 //CHECK THIS IF CONFUSED
-async function exampleImplementation(){
-  let data = await getAPINews("tesla");
-  let sentimentArr = [];
-  for(let i = 0; i < data.length; i++){
-    sentimentArr.push(await getSentiment(data[i].title));
-  }
-  console.log(sentimentArr);
-}
 
 module.exports = {
   getAPINews,

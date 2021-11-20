@@ -1,7 +1,7 @@
 import React from "react";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Scan from "../screens/Scan";
 import Results from "../screens/Results"
 import Settings from "../screens/Settings";
@@ -37,6 +37,9 @@ const MainTabScreen = () => {
         options={{
           tabBarLabel: "Home",
           tabBarColor: '#3F51B5',
+          tabBarIcon: () => (
+            <MaterialIcons name="home" size={18} color={"white"} />
+          ),
         }}
       />
       <Tab.Screen
@@ -45,6 +48,9 @@ const MainTabScreen = () => {
         options={{
           tabBarLabel: "Settings",
           tabBarColor: '#3F51B5',
+          tabBarIcon: () => (
+            <MaterialIcons name="settings" size={18} color={"white"} />
+          ),
         }}
       />
     </Tab.Navigator>

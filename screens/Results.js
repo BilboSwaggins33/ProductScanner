@@ -74,7 +74,7 @@ export default function Results({ navigation, route }) {
                     title={item}
                     left={props => <List.Icon {...props} icon="check" />}
                   />
-                ))}{/* format ui and expand button*/}
+                ))}
             </View>
             <Title style={{marginTop:20}}>Links</Title>
             <View style={{flexDirection:'row',justifyContent:"space-between"}}>

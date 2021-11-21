@@ -1,5 +1,6 @@
 import axios from "axios"
 
+/* Get all news articles */
 export async function getAPINews(topic){
   const promise = new Promise((resolve, reject)=>{
     axios({
@@ -13,7 +14,7 @@ export async function getAPINews(topic){
   })
   return promise;
 }
-
+/* Call to a sentiment analysis API */
 export async function getSentiment(line){
   const promise = new Promise((resolve, reject)=>{
     axios({
@@ -35,8 +36,3 @@ export async function getSentiment(line){
   return promise;
 }
 
-
-module.exports = {
-  getAPINews,
-  getSentiment
-}

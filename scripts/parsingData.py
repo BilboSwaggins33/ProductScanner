@@ -1,5 +1,5 @@
 import json
-str ="""<option value="https://guide.ethical.org.au/company/?company=4963">2Chillies Swimwear</option>
+str = """<option value="https://guide.ethical.org.au/company/?company=4963">2Chillies Swimwear</option>
 <option value="https://guide.ethical.org.au/company/?company=5455">2K</option>
 <option value="https://guide.ethical.org.au/company/?company=2289">2XU</option>
 <option value="https://guide.ethical.org.au/company/?company=4993">3Fish</option>
@@ -2489,13 +2489,17 @@ str ="""<option value="https://guide.ethical.org.au/company/?company=4963">2Chil
 <option value="https://guide.ethical.org.au/company/?company=2225">Zwanenberg</option>
 <option value="https://guide.ethical.org.au/company/?company=2226">Zwanenberg Australia</option>
 <option value="https://guide.ethical.org.au/company/?company=5520">Zynga</option>"""
+
+
 def find2nd(haystack, needle):
-    parts= haystack.split(needle, 2)
-    if len(parts)<=2:
+    parts = haystack.split(needle, 2)
+    if len(parts) <= 2:
         return -1
     return len(haystack)-len(parts[-1])-len(needle)
 
-var ={}
+#Parsing data from a <select> html tag on https://guide.ethical.org.au/ into a dictionary for ease of webscraping
+var = {}
 for i in str.split('\n'):
-    var[i[i.index(">")+1:find2nd(i,"<")]]=i[find2nd(i,"=")+1:find2nd(i,'"')]
+    var[i[i.index(">")+1:find2nd(i, "<")]
+        ] = i[find2nd(i, "=")+1:find2nd(i, '"')]
 print(json.dumps(var))
